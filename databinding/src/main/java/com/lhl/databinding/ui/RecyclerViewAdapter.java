@@ -79,7 +79,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        return new VH(getDataBinding(viewType, viewGroup, inflater), viewType);
+        return new VH(new DataBinding(layout(viewType), viewGroup, inflater), viewType);
     }
 
     @Override
@@ -244,7 +244,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
     }
 
 
-    public abstract DataBinding getDataBinding(int itemType, ViewGroup group, LayoutInflater inflater);
+    public abstract int layout(int itemType);
 
     public abstract int getModelId(int itemType);
 

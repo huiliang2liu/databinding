@@ -86,7 +86,7 @@ public abstract class PagerAdapter<T> extends androidx.viewpager.widget.PagerAda
             Application application = getApplication();
             if (application != null)
                 mTag.viewHolder.setContext(application, applicationId());
-            mTag.view = getDataBinding(itemType, container, inflater);
+            mTag.view = new DataBinding(layout(itemType), container, inflater);
             mTag.viewHolder.setView(mTag.view);
             mTag.viewHolder.setAdapter(this);
             mTag.viewHolder.setId(getModelId(itemType));
@@ -168,7 +168,7 @@ public abstract class PagerAdapter<T> extends androidx.viewpager.widget.PagerAda
     //    public abstract ViewHolder<T> getViewHolder(int itemType);
     public abstract int getModelId(int getModelId);
 
-    public abstract DataBinding getDataBinding(int itemType, ViewGroup group, LayoutInflater inflater);
+    public abstract int layout(int itemType);
 
     private class Tag {
         private ViewHolder viewHolder;
