@@ -33,6 +33,14 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.4.0'
+    implementation  'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
+    implementation  'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
+    implementation  'io.github.scwang90:refresh-header-radar:2.0.5'       //雷达刷新头
+    implementation  'io.github.scwang90:refresh-header-falsify:2.0.5'     //虚拟刷新头
+    implementation  'io.github.scwang90:refresh-header-material:2.0.5'    //谷歌刷新头
+    implementation  'io.github.scwang90:refresh-header-two-level:2.0.5'   //二级刷新头
+    implementation  'io.github.scwang90:refresh-footer-ball:2.0.5'        //球脉冲加载
+    implementation  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -44,7 +52,7 @@ boolean hasWeb = false
 
 var PUB_GROUP_ID = "com.lhl.databinding"
 var PUB_ARTIFACT_ID = "databinding"
-var PUB_CORE_VERSION = "1.0.0"
+var PUB_CORE_VERSION = "1.0.1"
 var PUBLISH_URL = "/Users/liuhuiliang/work/gitMaven"
 var PUBLISH_USERNAME = "deployment"
 var PUBLISH_PASSWORD = "000000"
