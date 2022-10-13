@@ -9,22 +9,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.HasDefaultViewModelProviderFactory;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.lhl.databinding.App;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 
-public abstract class BaseActivity extends Activity implements IUi, ViewModelStoreOwner, HasDefaultViewModelProviderFactory {
+public abstract class BaseActivity extends Activity implements IUi, ViewModelStoreOwner, HasDefaultViewModelProviderFactory, LifecycleOwner {
     private DataBinding dataBinding;
     private Warning warning;
     private AtomicReference<ViewModelProvider> activityProvider = new AtomicReference<>();
     private AtomicReference<ViewModelProvider> appProvider = new AtomicReference<>();
     private ViewModelStore store = new ViewModelStore();
+    private LifecycleRegistry lifecycle = new LifecycleRegistry(this);
     private ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
         @NonNull
         @Override
@@ -47,6 +54,7 @@ public abstract class BaseActivity extends Activity implements IUi, ViewModelSto
     @Override
     protected final void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
         dataBinding = new DataBinding(layout(), this);
         setContentView(dataBinding.getRoot());
         initAppViewModel(getAppProvider());
@@ -101,6 +109,30 @@ public abstract class BaseActivity extends Activity implements IUi, ViewModelSto
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START);
+    }
+
+    @Override
     public View getRoot() {
         if (warning == null) {
             warning = new Warning(this, getWindow());
@@ -119,4 +151,15 @@ public abstract class BaseActivity extends Activity implements IUi, ViewModelSto
     public ViewModelProvider.Factory getDefaultViewModelProviderFactory() {
         return factory;
     }
+
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return lifecycle;
+    }
+
+    public CreationExtras getDefaultViewModelCreationExtras() {
+        return CreationExtras.Empty.INSTANCE;
+    }
+
 }

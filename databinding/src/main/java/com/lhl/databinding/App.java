@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.lifecycle.viewmodel.CreationExtras;
 
 
 public class App implements ViewModelStoreOwner, HasDefaultViewModelProviderFactory {
@@ -62,5 +63,9 @@ public class App implements ViewModelStoreOwner, HasDefaultViewModelProviderFact
     @Override
     public ViewModelProvider.Factory getDefaultViewModelProviderFactory() {
         return factory;
+    }
+
+    public CreationExtras getDefaultViewModelCreationExtras() {
+        return CreationExtras.Empty.INSTANCE;
     }
 }
