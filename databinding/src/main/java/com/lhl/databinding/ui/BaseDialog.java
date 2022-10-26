@@ -18,12 +18,29 @@ public abstract class BaseDialog extends Dialog implements IUi {
     private boolean dismiss = false;
     private DataBinding dataBinding;
     private Warning warning;
+    private Context context;
 
-    {
+    public BaseDialog(Context context) {
+        super(context);
+        init(context);
+    }
+
+    public BaseDialog(Context context, int themeResId) {
+        super(context, themeResId);
+        init(context);
+    }
+
+    protected BaseDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
+        super(context, cancelable, cancelListener);
+        init(context);
+    }
+
+    private void init(Context context){
+        this.context = context;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCanceledOnTouchOutside(touchClose());
         setCancelable(backClose());
-        dataBinding = new DataBinding(layout(), getContext());
+        dataBinding = new DataBinding(layout(), context);
         enter = enter();
         if (enter != null)
             enter.setAnimationListener(new Animation.AnimationListener() {
@@ -62,19 +79,6 @@ public abstract class BaseDialog extends Dialog implements IUi {
             });
     }
 
-
-    public BaseDialog(Context context) {
-        super(context);
-    }
-
-    public BaseDialog(Context context, int themeResId) {
-        super(context, themeResId);
-    }
-
-    protected BaseDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-    }
-
     public BaseDialog bindModel(int id, Object model) {
         dataBinding.bindModel(id, model);
         return this;
@@ -85,6 +89,10 @@ public abstract class BaseDialog extends Dialog implements IUi {
             warning = new Warning(getContext(), getWindow());
         }
         return dataBinding.getRoot();
+    }
+
+    public Context getInitContext(){
+        return context;
     }
 
     @Override
