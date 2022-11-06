@@ -25,6 +25,11 @@ public class ViewHolder<T> {
 
     public void setView(DataBinding context) {
         this.context = context;
+        init();
+    }
+
+    public void init(){
+
     }
 
     final void setContext(int position) {

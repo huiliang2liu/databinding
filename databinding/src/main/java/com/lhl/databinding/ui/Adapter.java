@@ -120,7 +120,7 @@ public abstract class Adapter<T> extends BaseAdapter implements IAdapter {
         if (converView == null) {
             Log.e(TAG, "converView is null");
             DataBinding binding = new DataBinding(layout(itemType), arg2, inflater);
-            ViewHolder baseTag = new ViewHolder<>();
+            ViewHolder baseTag = createViewHolder(itemType);
             converView = binding.getRoot();
             baseTag.setAdapter(this);
             baseTag.setId(getModelId(itemType));
@@ -134,6 +134,10 @@ public abstract class Adapter<T> extends BaseAdapter implements IAdapter {
         baseTag.setContext(position);
 
         return converView;
+    }
+
+    public ViewHolder<T> createViewHolder(int itemType){
+        return new ViewHolder<>();
     }
 
     public Application getApplication() {

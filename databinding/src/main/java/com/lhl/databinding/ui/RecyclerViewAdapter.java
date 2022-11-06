@@ -192,6 +192,11 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
         notifyDataSetChanged();
     }
 
+
+    public ViewHolder<T> createViewHolder(int itemType){
+        return new ViewHolder<>();
+    }
+
     private class VH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private ViewHolder viewHolder;
         private int position;
@@ -199,7 +204,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
 
         public VH(@NonNull DataBinding binding, int itemType) {
             super(binding.getRoot());
-            viewHolder = new ViewHolder();
+            viewHolder = createViewHolder(itemType);
             viewHolder.setView(binding);
             viewHolder.setId(getModelId(itemType));
             viewHolder.setAdapter(RecyclerViewAdapter.this);

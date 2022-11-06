@@ -1,5 +1,6 @@
 package com.lhl.databinding;
 
+import android.os.Build;
 import android.text.method.MovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -67,7 +68,7 @@ public class BindData {
     }
 
     @BindingAdapter("setEnableAutoLoadMore")
-    public static void setEnableAutoLoadMore(SmartRefreshLayout layout,boolean autoLadMore){
+    public static void setEnableAutoLoadMore(SmartRefreshLayout layout, boolean autoLadMore) {
         layout.setEnableAutoLoadMore(autoLadMore);
     }
 
@@ -205,9 +206,18 @@ public class BindData {
         iv.setImageResource(res);
     }
 
+    @BindingAdapter("text")
+    public static void setText(TextView tv, int src) {
+        tv.setText(src);
+    }
+
     @BindingAdapter("textColor")
-    public static void textColor(TextView tv, int color) {
-        tv.setTextColor(color);
+    public static void textColor(TextView textView, int src) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            textView.setTextColor(textView.getContext().getColor(src));
+            return;
+        }
+        textView.setTextColor(textView.getContext().getResources().getColor(src));
     }
 
     @BindingAdapter("append")
@@ -243,14 +253,8 @@ public class BindData {
         editText.setOnFocusChangeListener(listener);
     }
 
-
-    @BindingAdapter("setCurrentItem")
-    public static void setCurrentItem(ViewPager view, int page) {
-        view.setCurrentItem(page, false);
-    }
-
     @BindingAdapter("background")
-    public static void setBackgroundColor(View view, int src) {
+    public static void setBackground(View view, int src) {
         try {
             view.setBackgroundResource(src);
             return;
@@ -272,14 +276,23 @@ public class BindData {
         recyclerView.toCentre(position, false);
     }
 
-    @BindingAdapter("setBackgroundResource")
-    public static void setBackgroundResource(View view, int res) {
-        view.setBackgroundResource(res);
-    }
-
     @BindingAdapter("setMovementMethod")
     public static void setMovementMethod(TextView tv, MovementMethod movementMethod) {
         tv.setMovementMethod(movementMethod);
+    }
+
+    @BindingAdapter("page")
+    public static void setPage(ViewPager viewPager, int page) {
+        if (page < 0)
+            return;
+        viewPager.setCurrentItem(page, false);
+    }
+
+    @BindingAdapter("pageAnimator")
+    public static void setPageAnimator(ViewPager viewPager, int page) {
+        if (page < 0)
+            return;
+        viewPager.setCurrentItem(page, true);
     }
 
     public interface OnClickListener {

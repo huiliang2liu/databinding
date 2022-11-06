@@ -82,7 +82,7 @@ public abstract class PagerAdapter<T> extends androidx.viewpager.widget.PagerAda
         if (mTag == null) {
             mTag = new Tag();
             mTag.itemType = itemType;
-            mTag.viewHolder = new ViewHolder<>();
+            mTag.viewHolder = createViewHolder(itemType);
             Application application = getApplication();
             if (application != null)
                 mTag.viewHolder.setContext(application, applicationId());
@@ -97,6 +97,10 @@ public abstract class PagerAdapter<T> extends androidx.viewpager.widget.PagerAda
         mTag.viewHolder.setContext(position);
         container.addView(mTag.view.getRoot());
         return mTag;
+    }
+
+    public ViewHolder<T> createViewHolder(int itemType){
+        return new ViewHolder<>();
     }
 
     public Application getApplication() {
