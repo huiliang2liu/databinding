@@ -57,13 +57,17 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
             int last = linearLayoutManager.findLastVisibleItemPosition();
             if (position >= first && position <= last)
                 notifyItemChanged(position);
-        } else if (manager instanceof GridLayoutManager) {
+            return;
+        }
+        if (manager instanceof GridLayoutManager) {
             GridLayoutManager linearLayoutManager = (GridLayoutManager) manager;
             int first = linearLayoutManager.findFirstVisibleItemPosition();
             int last = linearLayoutManager.findLastVisibleItemPosition();
             if (position >= first && position <= last)
                 notifyItemChanged(position);
+            return;
         }
+        notifyItemChanged(position);
     }
 
     @Override
@@ -120,6 +124,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
     public void addItem(Object o) {
         if (o == null)
             return;
+        int size = objects.size();
         objects.add((T) o);
         if (recyclerView != null) {
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
@@ -128,7 +133,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
                 cardLayoutManager.resetSize();
             }
         }
-        notifyDataSetChanged();
+        notifyItemInserted(size);
     }
 
 
@@ -136,6 +141,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
     public void addItem(List list) {
         if (list == null || list.size() <= 0)
             return;
+        int size = objects.size();
         objects.addAll(list);
         if (recyclerView != null) {
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
@@ -144,39 +150,33 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
                 cardLayoutManager.resetSize();
             }
         }
-        notifyDataSetChanged();
+        notifyItemRangeInserted(size, list.size());
     }
 
     @Override
     public void remove(Object o) {
         if (o == null)
             return;
-        if (objects.remove(o)) {
-            if (recyclerView != null) {
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                if (layoutManager != null && layoutManager instanceof CardLayoutManager) {
-                    CardLayoutManager cardLayoutManager = (CardLayoutManager) layoutManager;
-                    cardLayoutManager.resetSize();
-                }
+        int index = objects.indexOf(o);
+        if (index < 0)
+            return;
+        objects.remove(index);
+        if (recyclerView != null) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager != null && layoutManager instanceof CardLayoutManager) {
+                CardLayoutManager cardLayoutManager = (CardLayoutManager) layoutManager;
+                cardLayoutManager.resetSize();
             }
-            notifyDataSetChanged();
         }
+        notifyItemRemoved(index);
     }
 
     @Override
     public void remove(List list) {
         if (list == null || list.size() <= 0)
             return;
-        if (objects.removeAll(list)) {
-            if (recyclerView != null) {
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                if (layoutManager != null && layoutManager instanceof CardLayoutManager) {
-                    CardLayoutManager cardLayoutManager = (CardLayoutManager) layoutManager;
-                    cardLayoutManager.resetSize();
-                }
-            }
-            notifyDataSetChanged();
-        }
+        for (Object o : list)
+            remove(o);
     }
 
     @Override
@@ -193,7 +193,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter implem
     }
 
 
-    public ViewHolder<T> createViewHolder(int itemType){
+    public ViewHolder<T> createViewHolder(int itemType) {
         return new ViewHolder<>();
     }
 
