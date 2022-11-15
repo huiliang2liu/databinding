@@ -35,7 +35,12 @@ public abstract class BaseFragment extends Fragment implements IUi {
             initOthers();
             bindModel();
         }
+        update(savedInstanceState);
         return dataBinding.getRoot();
+    }
+
+    protected void update(Bundle savedInstanceState) {
+
     }
 
     protected void initActivityViewModel(ViewModelProvider provider) {

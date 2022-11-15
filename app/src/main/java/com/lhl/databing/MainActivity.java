@@ -12,17 +12,21 @@ import android.util.Log;
 
 import com.lhl.databinding.BindData;
 import com.lhl.databinding.ui.BaseActivity;
+import com.lhl.databinding.ui.BaseFragmentActivity;
+import com.lhl.databinding.ui.ViewPagerAdapter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
-public class MainActivity extends BaseActivity implements BindData.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class MainActivity extends BaseFragmentActivity implements BindData.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     public ObservableInt type = new ObservableInt(-1);
     private Handler handler = new Handler(Looper.getMainLooper());
+    public ViewPagerAdapter adapter;
 
     @Override
     protected void bindModel() {
         super.bindModel();
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         bindModel(BR.activity,this);
     }
 
@@ -35,21 +39,28 @@ public class MainActivity extends BaseActivity implements BindData.OnClickListen
     public void onClick(int id) {
         type.set(-1);
         if (id == 1) {
-            type.set(BindData.AUTO_REFRESH);
+            adapter.addItem(new MyFragment());
             return;
         }
         if (id == 2) {
-            type.set(BindData.AUTO_LOAD_MORE);
+            adapter.addItem(new MyFragment());
+            adapter.addItem(new MyFragment());
             return;
         }
         if (id == 3) {
-            type.set(BindData.FINISH_REFRESH);
+            adapter.remove(adapter.getItem(0));
+//            type.set(BindData.FINISH_REFRESH);
             return;
         }
         if (id == 4) {
-            type.set(BindData.FINISH_LOAD_MORE);
+            adapter.clean();
             return;
         }
+        if(id==5){
+            adapter.setSelection(1);
+            return;
+        }
+        adapter.notifyDataSetChanged(0);
     }
 
     @Override
